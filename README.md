@@ -1,2 +1,1 @@
-# quizzical-app
- 
+# Quizzical App

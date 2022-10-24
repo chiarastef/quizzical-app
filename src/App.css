@@ -1,0 +1,11 @@
+.App {
+  padding: 40px;
+}
+
+.btn {
+  font-family: "Inter", sans-serif;
+  background-color: #4d5b9e;
+  color: #f5f7fb;
+  border: none;
+  cursor: pointer;
+}

@@ -1,0 +1,20 @@
+.StartPage {
+  text-align: center;
+}
+
+.StartPage-title {
+  font-family: "Karla", sans-serif;
+  font-weight: 700;
+  font-size: 31px;
+  line-height: 37px;
+  color: #293264;
+  margin-bottom: 30px;
+}
+
+.StartPage-btn {
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 500;
+  padding: 17px 60px;
+  border-radius: 15px;
+}
