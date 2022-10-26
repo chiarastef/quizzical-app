@@ -1,17 +1,16 @@
+import React from "react";
 import axios from "axios";
 import { nanoid } from "nanoid";
 import { decode } from "html-entities";
 
-import React from "react";
+import Buttons from "./Buttons";
+
 import "./QuizPage.css";
 
-export default function QuizPage() {
+export default function QuizPage(props) {
   const [questions, setQuestions] = React.useState([]);
 
-  function sortRandom() {
-    return 0.5 - Math.random();
-  }
-
+  // API call to get questions from Open Trivia Database (https://opentdb.com/)
   React.useEffect(() => {
     axios
       .get("https://opentdb.com/api.php?amount=5&type=multiple")
@@ -20,40 +19,54 @@ export default function QuizPage() {
       });
   }, []);
 
-  const questionsMap = questions.map((item) => {
+  // Array of all answers to all questions
+  const allAnswers = [];
+
+  // Build and render question element
+  const questionsMap = questions.map((question) => {
+    // Array of answers for every question
     const answers = [];
 
+    // Push correct and incorrect answers objects to array (and decode text in case of html entities)
     answers.push({
-      answer: item.correct_answer,
+      answer: decode(question.correct_answer),
       correct: true,
       selected: false,
     });
 
-    item.incorrect_answers.forEach((element) =>
+    question.incorrect_answers.forEach((answer) =>
       answers.push({
-        answer: element,
+        answer: decode(answer),
         correct: false,
         selected: false,
       })
     );
 
+    // Random sorting function to shuffle array
+    function sortRandom() {
+      return 0.5 - Math.random();
+    }
+
+    // Select answer
     function btnClick(e) {
       e.target.classList.toggle("answer-selected");
 
-      answers.forEach((element) => {
-        if (e.target.innerText === element.answer) {
-          element.selected = !element.selected;
+      // Change value of selected answer and push answer object to allAnswers array
+      answers.forEach((answerEl) => {
+        if (e.target.innerText === answerEl.answer) {
+          answerEl.selected = !answerEl.selected;
         }
+        allAnswers.push(answerEl);
       });
     }
 
     return (
       <div className="question-el" key={nanoid()}>
-        <div className="question">{decode(item.question)}</div>
-        <div className="answers">
-          {answers.sort(sortRandom).map((answer) => (
+        <div className="question">{decode(question.question)}</div>
+        <div className="answer-el">
+          {answers.sort(sortRandom).map((answerEl) => (
             <button className="answer" key={nanoid()} onClick={btnClick}>
-              {decode(answer.answer)}
+              {answerEl.answer}
             </button>
           ))}
         </div>
@@ -62,16 +75,10 @@ export default function QuizPage() {
     );
   });
 
-  function checkAnswers() {
-    console.log();
-  }
-
   return (
     <div className="QuizPage">
       {questionsMap}
-      <button className="btn QuizPage-btn" onClick={checkAnswers}>
-        Check answers
-      </button>
+      <Buttons answers={allAnswers} startQuiz={props.startQuiz} />
     </div>
   );
 }

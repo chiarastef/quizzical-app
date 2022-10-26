@@ -1,0 +1,15 @@
+.QuizPage-btn {
+  font-size: 10px;
+  line-height: 12px;
+  padding: 10px 22px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.quiz-results {
+  font-size: 13px;
+  line-height: 15px;
+  font-weight: 700;
+  color: #293264;
+  margin-right: 20px;
+}

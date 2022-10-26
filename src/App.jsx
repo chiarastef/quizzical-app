@@ -7,12 +7,16 @@ export default function App() {
   const [quizStarted, setQuizStarted] = React.useState(false);
 
   function startQuiz() {
-    setQuizStarted(true);
+    setQuizStarted((prevState) => !prevState);
   }
 
   return (
     <div className="App">
-      {quizStarted ? <QuizPage /> : <StartPage startQuiz={startQuiz} />}
+      {quizStarted ? (
+        <QuizPage startQuiz={startQuiz} />
+      ) : (
+        <StartPage startQuiz={startQuiz} />
+      )}
     </div>
   );
 }
