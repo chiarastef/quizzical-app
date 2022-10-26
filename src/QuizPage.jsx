@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { nanoid } from "nanoid";
 import { decode } from "html-entities";
+import ClipLoader from "react-spinners/ClipLoader";
 
 import Buttons from "./Buttons";
 
@@ -9,6 +10,7 @@ import "./QuizPage.css";
 
 export default function QuizPage(props) {
   const [questions, setQuestions] = React.useState([]);
+  const [loaded, setLoaded] = React.useState(false);
 
   // API call to get questions from Open Trivia Database (https://opentdb.com/)
   React.useEffect(() => {
@@ -16,6 +18,7 @@ export default function QuizPage(props) {
       .get("https://opentdb.com/api.php?amount=5&type=multiple")
       .then(function (resp) {
         setQuestions(resp.data.results);
+        setLoaded(true);
       });
   }, []);
 
@@ -75,10 +78,27 @@ export default function QuizPage(props) {
     );
   });
 
-  return (
-    <div className="QuizPage">
-      {questionsMap}
-      <Buttons answers={allAnswers} startQuiz={props.startQuiz} />
-    </div>
-  );
+  const style = {
+    display: "flex",
+    margin: "30px auto",
+  };
+
+  if (loaded) {
+    return (
+      <div className="QuizPage">
+        {questionsMap}
+        <Buttons answers={allAnswers} startQuiz={props.startQuiz} />
+      </div>
+    );
+  } else {
+    return (
+      <ClipLoader
+        color={"#293264"}
+        loading={true}
+        size={80}
+        cssOverride={style}
+        aria-label="Loading Spinner"
+      />
+    );
+  }
 }
